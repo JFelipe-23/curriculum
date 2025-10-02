@@ -1,0 +1,349 @@
+{% extends 'base_template.html' %}
+{% block title %}{% if is_new==true %}Crea{% else %}Edita{% endif %}{% endblock %}
+{% block body %}
+    <div class="form-container">
+    {% if is_new==true %}
+    <h1 class="form-title">ARMA TU HOJA DE VIDA</h1>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <div class="form-section">
+                <h2>Información Personal</h2>
+                <div class="form-group">
+                    {{ form.full_name.label(class="form-label") }}
+                    {{ form.full_name(class="form-control") }}
+                    {% for error in form.full_name.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.title.label(class="form-label") }}
+                    {{ form.title(class="form-control") }}
+                    {% for error in form.title.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.about_me.label(class="form-label") }}
+                    {{ form.about_me(class="form-control") }}
+                    {% for error in form.about_me.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Experiencia Profesional</h2>
+                <div id="experience-forms">
+                    {% for exp_form in form.experience %}
+                        <fieldset>
+                            <legend>Experiencia {{ loop.index }}</legend>
+                            <div class="form-group">
+                                {{ exp_form.company.label(class="form-label") }}
+                                {{ exp_form.company(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ exp_form.position.label(class="form-label") }}
+                                {{ exp_form.position(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ exp_form.start_date.label(class="form-label") }}
+                                {{ exp_form.start_date(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ exp_form.end_date.label(class="form-label") }}
+                                {{ exp_form.end_date(class="form-control") }}
+                            </div>
+                            {% for error in exp_form.errors.values() %}
+                                <span class="error-message">{{ error[0] }}</span>
+                            {% endfor %}
+                            <button type="button" class="btn btn-danger remove-form" onclick="removeForm(this)">
+                                <i class="fas fa-minus-circle"></i> Quitar Experiencia
+                            </button>
+                        </fieldset>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-success" onclick="addForm('experience')">
+                    <i class="fas fa-plus-circle"></i> Agregar Experiencia
+                </button>
+            </div>
+
+            <div class="form-section">
+                <h2>Educación</h2>
+                <div id="education-forms">
+                    {% for edu_form in form.education %}
+                        <fieldset>
+                            <legend>Educación {{ loop.index }}</legend>
+                            <div class="form-group">
+                                {{ edu_form.school.label(class="form-label") }}
+                                {{ edu_form.school(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ edu_form.degree.label(class="form-label") }}
+                                {{ edu_form.degree(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ edu_form.start_date.label(class="form-label") }}
+                                {{ edu_form.start_date(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ edu_form.end_date.label(class="form-label") }}
+                                {{ edu_form.end_date(class="form-control") }}
+                            </div>
+                            {% for error in edu_form.errors.values() %}
+                                <span class="error-message">{{ error[0] }}</span>
+                            {% endfor %}
+                            <button type="button" class="btn btn-danger remove-form" onclick="removeForm(this)">
+                                <i class="fas fa-minus-circle"></i> Quitar Educación
+                            </button>
+                        </fieldset>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-success" onclick="addForm('education')">
+                    <i class="fas fa-plus-circle"></i> Agregar Educación
+                </button>
+            </div>
+
+            <div class="form-section">
+                <h2>Habilidades</h2>
+                <div id="skills-forms">
+                    {% for skill_form in form.skills %}
+                        <fieldset>
+                            <legend>Habilidad {{ loop.index }}</legend>
+                            <div class="form-group">
+                                {{ skill_form.nombre.label(class="form-label") }}
+                                {{ skill_form.nombre(class="form-control") }}
+                            </div>
+                            <div class="form-group">
+                                {{ skill_form.level.label(class="form-label") }}
+                                {{ skill_form.level(class="form-control") }}
+                            </div>
+                            {% for error in skill_form.errors.values() %}
+                                <span class="error-message">{{ error[0] }}</span>
+                            {% endfor %}
+                            <button type="button" class="btn btn-danger remove-form" onclick="removeForm(this)">
+                                <i class="fas fa-minus-circle"></i> Quitar Habilidad
+                            </button>
+                        </fieldset>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-success" onclick="addForm('skills')">
+                    <i class="fas fa-plus-circle"></i> Agregar Habilidad
+                </button>
+            </div>
+
+            <div class="form-buttons">
+                {{ form.submit(class_="btn btn-primary") }}
+            </div>
+        </form>
+    {% else %}
+    <h1 class="form-title">EDITA TU HOJA DE VIDA</h1>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="form-section">
+            <h2>Información Personal</h2>
+            <div class="form-group">
+                {{ form.full_name.label(class="form-label") }}
+                {{ form.full_name(class="form-control") }}
+                {% for error in form.full_name.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-control") }}
+                {% for error in form.title.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.about_me.label(class="form-label") }}
+                {{ form.about_me(class="form-control") }}
+                {% for error in form.about_me.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Experiencia Profesional</h2>
+            <div id="experience-forms">
+                {% for exp_form in form.experience %}
+                    <fieldset>
+                        <legend>Experiencia {{ loop.index }}</legend>
+                        <div class="form-group">
+                            {{ exp_form.company.label(class="form-label") }}
+                            {{ exp_form.company(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ exp_form.position.label(class="form-label") }}
+                            {{ exp_form.position(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ exp_form.start_date.label(class="form-label") }}
+                            {{ exp_form.start_date(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ exp_form.end_date.label(class="form-label") }}
+                            {{ exp_form.end_date(class="form-control") }}
+                        </div>
+                        {% for error in exp_form.errors.values() %}
+                            <span class="error-message">{{ error[0] }}</span>
+                        {% endfor %}
+                        <button type="button" class="btn btn-danger remove-form" onclick="removeForm(this)">
+                            <i class="fas fa-minus-circle"></i> Quitar Experiencia
+                        </button>
+                    </fieldset>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-success" onclick="addForm('experience')">
+                <i class="fas fa-plus-circle"></i> Agregar Experiencia
+            </button>
+        </div>
+
+        <div class="form-section">
+            <h2>Educación</h2>
+            <div id="education-forms">
+                {% for edu_form in form.education %}
+                    <fieldset>
+                        <legend>Educación {{ loop.index }}</legend>
+                        <div class="form-group">
+                            {{ edu_form.school.label(class="form-label") }}
+                            {{ edu_form.school(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ edu_form.degree.label(class="form-label") }}
+                            {{ edu_form.degree(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ edu_form.start_date.label(class="form-label") }}
+                            {{ edu_form.start_date(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ edu_form.end_date.label(class="form-label") }}
+                            {{ edu_form.end_date(class="form-control") }}
+                        </div>
+                        {% for error in edu_form.errors.values() %}
+                            <span class="error-message">{{ error[0] }}</span>
+                        {% endfor %}
+                        <button type="button" class="btn btn-danger remove-form" onclick="removeForm(this)">
+                            <i class="fas fa-minus-circle"></i> Quitar Educación
+                        </button>
+                    </fieldset>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-success" onclick="addForm('education')">
+                <i class="fas fa-plus-circle"></i> Agregar Educación
+            </button>
+        </div>
+
+        <div class="form-section">
+            <h2>Habilidades</h2>
+            <div id="skills-forms">
+                {% for skill_form in form.skills %}
+                    <fieldset>
+                        <legend>Habilidad {{ loop.index }}</legend>
+                        <div class="form-group">
+                            {{ skill_form.nombre.label(class="form-label") }}
+                            {{ skill_form.nombre(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ skill_form.level.label(class="form-label") }}
+                            {{ skill_form.level(class="form-control") }}
+                        </div>
+                        {% for error in skill_form.errors.values() %}
+                            <span class="error-message">{{ error[0] }}</span>
+                        {% endfor %}
+                        <button type="button" class="btn btn-danger remove-form" onclick="removeForm(this)">
+                            <i class="fas fa-minus-circle"></i> Quitar Habilidad
+                        </button>
+                    </fieldset>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-success" onclick="addForm('skills')">
+                <i class="fas fa-plus-circle"></i> Agregar Habilidad
+            </button>
+        </div>
+
+        <div class="form-buttons">
+            {{ form.submit(class_="btn btn-primary") }}
+        </div>
+    </form>
+{% endif %}
+
+<script>
+function addForm(formType) {
+    const container = document.getElementById(`${formType}-forms`);
+    const formCount = container.getElementsByTagName('fieldset').length;
+    const newFieldset = document.createElement('fieldset');
+    newFieldset.style = "margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;";
+    
+    // Clonar el primer fieldset para mantener la estructura del formulario
+    const firstFieldset = container.querySelector('fieldset');
+    if (firstFieldset) {
+        const clone = firstFieldset.cloneNode(true);
+        
+        // Actualizar la leyenda
+        const legend = clone.querySelector('legend');
+        if (formType === 'experience') {
+            legend.textContent = `Experiencia ${formCount + 1}`;
+        } else if (formType === 'education') {
+            legend.textContent = `Educación ${formCount + 1}`;
+        } else {
+            legend.textContent = `Skill ${formCount + 1}`;
+        }
+        
+        // Limpiar los valores de los campos
+        clone.querySelectorAll('input').forEach(input => {
+            input.value = '';
+            // Actualizar los nombres de los campos
+            const oldName = input.getAttribute('name');
+            if (oldName) {
+                const newName = oldName.replace(/\d+/, formCount);
+                input.setAttribute('name', newName);
+                input.setAttribute('id', newName);
+            }
+        });
+        
+        // Agregar el botón de eliminar
+        clone.querySelector('.remove-form').onclick = function() { removeForm(this); };
+        
+        container.appendChild(clone);
+    }
+}
+
+function removeForm(button) {
+    const fieldset = button.closest('fieldset');
+    const container = fieldset.parentNode;
+    const formType = container.id.replace('-forms', '');
+    
+    if (container.getElementsByTagName('fieldset').length > 1) {
+        fieldset.remove();
+        
+        // Actualizar los índices de las leyendas
+        const fieldsets = container.getElementsByTagName('fieldset');
+        Array.from(fieldsets).forEach((fs, index) => {
+            const legend = fs.querySelector('legend');
+            if (formType === 'experience') {
+                legend.textContent = `Experiencia ${index + 1}`;
+            } else if (formType === 'education') {
+                legend.textContent = `Educación ${index + 1}`;
+            } else {
+                legend.textContent = `Skill ${index + 1}`;
+            }
+            
+            // Actualizar los nombres de los campos
+            fs.querySelectorAll('input').forEach(input => {
+                const oldName = input.getAttribute('name');
+                if (oldName) {
+                    const newName = oldName.replace(/\d+/, index);
+                    input.setAttribute('name', newName);
+                    input.setAttribute('id', newName);
+                }
+            });
+        });
+    } else {
+        alert('Debe mantener al menos un formulario');
+    }
+}
+</script>
+{% endblock %}

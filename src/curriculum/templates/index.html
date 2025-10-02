@@ -1,0 +1,75 @@
+{% extends 'base_template.html' %}
+{% block title %}Hojas de Vida{% endblock %}
+{% block body %}
+<div class="container">
+    {% if cvs==[] %}
+        <div class="no-cvs">
+            <h1>No hay hojas de vida disponibles</h1>
+            <p>Aún no se han creado hojas de vida en el sistema.</p>
+        </div>
+    {% else %}
+        <h1>Hojas de Vida Disponibles</h1>
+        <div class="cv-grid">
+            {% for cv in cvs %}
+            <div class="cv-card">
+                <div class="cv-card__header">
+                    <div class="cv-card__name">{{cv["full_name"]}}</div>
+                    <div class="cv-card__title">{{cv["title"]}}</div>
+                </div>
+                
+                <div class="cv-card__about">
+                    {{cv["about_me"]}}
+                </div>
+
+                <div class="cv-section">
+                    <h2 class="cv-section__title">Experiencia</h2>
+                    {% for experiencia in cv["experience"] %}
+                    <div class="cv-item">
+                        <div class="cv-item__title">{{experiencia["position"]}}</div>
+                        <div class="cv-item__subtitle">{{experiencia["company"]}}</div>
+                        <div class="cv-item__date">
+                            {{experiencia["start_date"].strftime('%B %Y')}} - 
+                            {% if experiencia["end_date"] %}
+                                {{experiencia["end_date"].strftime('%B %Y')}}
+                            {% else %}
+                                Presente
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="cv-section">
+                    <h2 class="cv-section__title">Estudios</h2>
+                    {% for estudio in cv["education"] %}
+                    <div class="cv-item">
+                        <div class="cv-item__title">{{estudio["degree"]}}</div>
+                        <div class="cv-item__subtitle">{{estudio["school"]}}</div>
+                        <div class="cv-item__date">
+                            {{estudio["start_date"].strftime('%B %Y')}} - 
+                            {% if estudio["end_date"] %}
+                                {{estudio["end_date"].strftime('%B %Y')}}
+                            {% else %}
+                                Presente
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="cv-section">
+                    <h2 class="cv-section__title">Skills</h2>
+                    <div class="skills-list">
+                        {% for skill in cv["skills"] %}
+                        <span class="skill-tag">
+                            {{skill["nombre"]}} - {{skill["level"]}}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

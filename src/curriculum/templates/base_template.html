@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base_style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=home" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <nav style="background: #222; color: #fff; padding: 1em; display: flex; align-items: center; justify-content: space-between;">
+    <div>
+      {% if current_user.is_anonymous %}
+        <a href="{{ url_for('index') }}" style="color: #fff; margin-right: 1em;"><span class="material-symbols-outlined">home</span></a>
+        <a href="{{ url_for('login') }}" style="color: #fff; margin-right: 1em;">Iniciar sesión</a>
+        <a href="{{ url_for('show_signup_form') }}" style="color: #fff;">Registrarse</a>
+      {% else %}
+        <a href="{{ url_for('index') }}" style="color: #fff; margin-right: 1em;"><span class="material-symbols-outlined">home</span></a>
+        <span style="margin-right: 1em;">Bienvenido, {{ current_user.name }}</span>
+        <a href="{{ url_for('edit_cv') }}" style="color: #fff; margin-right: 1em;">Crear/Editar</a>
+        <a href="{{ url_for('logout') }}" style="color: #fff;">Cerrar sesión</a>
+      {% endif %}
+    </div>
+  </nav>
+    {% block body %}{% endblock %}
+</body>
+</html>
