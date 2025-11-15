@@ -7,6 +7,9 @@ from forms import *
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ba2e18ce248bab7ce9425333f0420b57a5f07dfef342e1876d3013a524acf416f813af3071a65e3860475fe8e81c3a42c3c8fa65051de39aa2037fa695b305a7bc7044a415eb'
 
+if __name__ == '__main__':
+    app.run(debug=True)
+	
 # Configuración de LoginManager
 login_manager = LoginManager(app)
 login_manager.init_app(app)
@@ -155,6 +158,3 @@ def api_get_cv(cv_id):
 	if not cv:
 		return jsonify({'error': 'CV no encontrado'}), 404
 	return jsonify(cv)
-
-if __name__ == '__main__':
-    app.run(debug=True)
