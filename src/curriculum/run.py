@@ -4,8 +4,26 @@ import pprint as pp
 from models import *
 from forms import *
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'ba2e18ce248bab7ce9425333f0420b57a5f07dfef342e1876d3013a524acf416f813af3071a65e3860475fe8e81c3a42c3c8fa65051de39aa2037fa695b305a7bc7044a415eb'
+# Esta función crea y configura la instancia de la aplicación Flask
+def create_app(config_name=None):
+    # 1. Inicialización de la aplicación
+    # La variable 'app' SOLO existe dentro de esta función
+    app = Flask(__name__)
+
+    # 2. Configuración (ej. DB, secretos, etc.)
+    # Puedes cargar configuraciones aquí basadas en config_name
+    # Por ahora, solo cargaremos la configuración básica.
+    app.config['SECRET_KEY'] = 'ba2e18ce248bab7ce9425333f0420b57a5f07dfef342e1876d3013a524acf416f813af3071a65e3860475fe8e81c3a42c3c8fa65051de39aa2037fa695b305a7bc7044a415eb'
+    
+    # 3. Definición de Rutas/Vistas (EJEMPLO)
+    @app.route('/', methods=['GET'])
+    def index():
+        return render_template('index.html', cvs=cvs)
+
+    # 4. Retorna la instancia de la aplicación
+    return app
+
+app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)
@@ -21,11 +39,6 @@ def load_user(user_id):
 		if str(user.id) == str(user_id):
 			return user
 	return None
-
-# Ruta principal: mostrar todas las hojas de vida
-@app.route('/', methods=['GET'])
-def index():
-	return render_template('index.html', cvs=cvs)
 
 # Ruta de inicio de sesión
 @app.route('/login', methods=['GET', 'POST'])
