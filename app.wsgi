@@ -1,11 +1,21 @@
 import sys
 import os
+import logging
 
-# Agregar el directorio src al path para poder importar el módulo curriculum
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-# Importar la aplicación Flask
-from curriculum.run import app
+base_dir = os.path.dirname(os.path.abspath(__file__))
+logging.debug('Base directory: ' + base_dir)
 
-if __name__ == "__main__":
-    app.run(host='192.168.100.10', port=8000, debug=False)
+src_path = os.path.join(base_dir, 'src')
+sys.path.insert(0, src_path)
+logging.debug('Python path added: ' + src_path)
+
+try:
+    from curriculum.run import app
+    logging.debug('Flask app imported successfully')
+    application = app
+    logging.debug('Application object created')
+except Exception as e:
+    logging.error('Error importing Flask app: ' + str(e), exc_info=True)
+    raise
